@@ -35,6 +35,8 @@ func TestGetUsers(t *testing.T) {
 }
 
 func TestAddUser(t *testing.T) {
+	repo := &mock.UserRepoMock{}
+	usecase := usecase.NewUserUsecase(repo)
 	testCases := []struct {
 		name    string
 		user    model.User
@@ -42,24 +44,22 @@ func TestAddUser(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "InvalidUser",
-			user:    mockUser,
-			mockErr: errors.New("invalid user"),
-			wantErr: true,
-		},
-		{
 			name:    "ValidUser",
 			user:    mockUser,
 			mockErr: nil,
 			wantErr: false,
 		},
+		{
+			name:    "InvalidUser",
+			user:    mockUser,
+			mockErr: errors.New("invalid user"),
+			wantErr: true,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			repo := &mock.UserRepoMock{}
-			usecase := usecase.NewUserUsecase(repo)
-			repo.On("AddUser", tc.user).Return(tc.mockErr)
+			repo.On("AddUser", tc.user).Return(tc.mockErr).Once()
 			err := usecase.AddUser(mockUser)
 
 			if !tc.wantErr {
@@ -74,6 +74,8 @@ func TestAddUser(t *testing.T) {
 }
 
 func TestEditUser(t *testing.T) {
+	repo := &mock.UserRepoMock{}
+	usecase := usecase.NewUserUsecase(repo)
 	testCases := []struct {
 		name    string
 		user    model.User
@@ -81,24 +83,22 @@ func TestEditUser(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "InvalidUser",
-			user:    mockUser,
-			mockErr: errors.New("invalid user"),
-			wantErr: true,
-		},
-		{
 			name:    "ValidUser",
 			user:    mockUser,
 			mockErr: nil,
 			wantErr: false,
 		},
+		{
+			name:    "InvalidUser",
+			user:    mockUser,
+			mockErr: errors.New("invalid user"),
+			wantErr: true,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			repo := &mock.UserRepoMock{}
-			usecase := usecase.NewUserUsecase(repo)
-			repo.On("EditUser", tc.user).Return(tc.mockErr)
+			repo.On("EditUser", tc.user).Return(tc.mockErr).Once()
 			err := usecase.EditUser(mockUser)
 
 			if !tc.wantErr {
